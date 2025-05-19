@@ -3,11 +3,11 @@ import kleur from "kleur";
 import path from "path";
 import { readFile } from "fs/promises";
 
-const __dirname = import.meta.dirname;
-const query = await readFile(path.join(__dirname, "dev_migration.sql"), "utf-8");
+const __dirname: string = import.meta.dirname;
+const query = await readFile(path.join(__dirname, "seed.sql"), "utf-8");
 
 await db.connect();
 await db.query(query);
 await db.end();
 
-console.log(kleur.bgGreen("MIGRATED SUCCESSFULLY"));
+console.log(kleur.bgGreen("SEEDED SUCCESSFULLY"));

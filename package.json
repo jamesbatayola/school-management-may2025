@@ -5,8 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "nodemon",
-		"dev:migrate": "tsx ./migration/start_migrate.ts",
-		"dev:seed": "tsx ./migration/start_seed.ts",
+		"dev:migrate": "tsx ./dev_migrations/start_migrate.ts",
+		"dev:seed": "tsx ./dev_seeds/start_seed.ts",
 		"migrate": "node-pg-migrate"
 	},
 	"repository": {
