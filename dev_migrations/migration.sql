@@ -2,10 +2,13 @@ BEGIN;
 CREATE TABLE IF NOT EXISTS guardians (
     id SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(64) NOT NULL,
-    phone_number TEXT NOT NULL,
+    -- eg: '+6309901840378'
+    phone_number TEXT UNIQUE CHECK (phone_number ~ '^\+?[0-9\- ]{7,20}$') NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+--
+--
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TYPE gender_enum AS ENUM ('MALE', 'FEMALE');
 CREATE TABLE IF NOT EXISTS students (
@@ -15,11 +18,14 @@ CREATE TABLE IF NOT EXISTS students (
     last_name VARCHAR(64) NOT NULL,
     gender gender_enum NOT NULL,
     email VARCHAR(124) UNIQUE NOT NULL,
+    password TEXT NOT NULL,
     guardian_id INTEGER NOT NULL,
     FOREIGN KEY (guardian_id) REFERENCES guardians (id) ON DELETE CASCADE,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+--
+--
 CREATE TABLE IF NOT EXISTS levels (
     id SERIAL PRIMARY KEY NOT NULL,
     grade INTEGER NOT NULL,
@@ -27,6 +33,8 @@ CREATE TABLE IF NOT EXISTS levels (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+--
+--
 CREATE TABLE IF NOT EXISTS student_levels (
     id SERIAL PRIMARY KEY NOT NULL,
     level_id INTEGER NOT NULL,
@@ -36,21 +44,49 @@ CREATE TABLE IF NOT EXISTS student_levels (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE IF NOT EXISTS teachers (
+--
+--
+CREAT CREATE TABLE IF NOT EXISTS teachers (
     id SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(124) NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE IF NOT EXISTS school_years (
+--
+--
+CREAT CREATE TABLE IF NOT EXISTS school_years (
     id SERIAL PRIMARY KEY NOT NULL,
     year_name VARCHAR (64) NOT NULL,
-    year_start TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    year_end TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    -- Default to January 1st of the current year
+    year_start TIMESTAMPTZ DEFAULT make_timestamp(
+        EXTRACT(
+            YEAR
+            FROM CURRENT_DATE
+        )::INT,
+        1,
+        1,
+        0,
+        0,
+        0
+    ),
+    -- Default to November 30th of the current year
+    year_end TIMESTAMPTZ DEFAULT make_timestamp(
+        EXTRACT(
+            YEAR
+            FROM CURRENT_DATE
+        )::INT,
+        11,
+        30,
+        0,
+        0,
+        0
+    ),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE IF NOT EXISTS terms (
+--
+--
+CREAT CREATE TABLE IF NOT EXISTS terms (
     id SERIAL PRIMARY KEY NOT NULL,
     year_id INTEGER NOT NULL,
     term_name VARCHAR (32) NOT NULL,
@@ -60,13 +96,17 @@ CREATE TABLE IF NOT EXISTS terms (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE IF NOT EXISTS subjects (
+--
+--
+CREAT CREATE TABLE IF NOT EXISTS subjects (
     id SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(32) NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE IF NOT EXISTS courses (
+--
+--
+CREAT CREATE TABLE IF NOT EXISTS courses (
     id SERIAL PRIMARY KEY NOT NULL,
     course_code VARCHAR(12) NOT NULL,
     subject_id INTEGER NOT NULL,
@@ -74,7 +114,9 @@ CREATE TABLE IF NOT EXISTS courses (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE IF NOT EXISTS classes (
+--
+--
+CREAT CREATE TABLE IF NOT EXISTS classes (
     id SERIAL PRIMARY KEY NOT NULL,
     teacher_id INTEGER NOT NULL,
     course_id INTEGER NOT NULL,
@@ -89,7 +131,9 @@ CREATE TABLE IF NOT EXISTS classes (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE IF NOT EXISTS student_classes (
+--
+--
+CREAT CREATE TABLE IF NOT EXISTS student_classes (
     id SERIAL PRIMARY KEY NOT NULL,
     student_id UUID UNIQUE NOT NULL,
     class_id INTEGER NOT NULL,
@@ -98,7 +142,9 @@ CREATE TABLE IF NOT EXISTS student_classes (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE IF NOT EXISTS enrollments (
+--
+--
+CREAT CREATE TABLE IF NOT EXISTS enrollments (
     id SERIAL PRIMARY KEY NOT NULL,
     student_id UUID UNIQUE NOT NULL,
     course_id INTEGER NOT NULL,
@@ -108,14 +154,18 @@ CREATE TABLE IF NOT EXISTS enrollments (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TYPE bill_status_enum as ENUM (
+--
+--
+CREAT CREATE TYPE bill_status_enum as ENUM (
     'PAID',
     'UNPAID',
     'PENDING',
     'CANCELLED',
     'OVERDUE'
 );
-CREATE TABLE IF NOT EXISTS enrollment_bills (
+--
+--
+CREAT CREATE TABLE IF NOT EXISTS enrollment_bills (
     id SERIAL PRIMARY KEY NOT NULL,
     enrollment_id INTEGER NOT NULL,
     bill_status bill_status_enum DEFAULT 'UNPAID' NOT NULL,
@@ -124,7 +174,9 @@ CREATE TABLE IF NOT EXISTS enrollment_bills (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-CREATE TABLE IF NOT EXISTS score_ranges (
+--
+--
+CREAT CREATE TABLE IF NOT EXISTS score_ranges (
     id SERIAL PRIMARY KEY NOT NULL,
     min_score INTEGER NOT NULL,
     max_score INTEGER NOT NULL,
@@ -132,4 +184,6 @@ CREATE TABLE IF NOT EXISTS score_ranges (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-COMMIT;
+--
+--
+CREAT COMMIT;

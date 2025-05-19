@@ -37,6 +37,7 @@
 		"typescript-eslint": "^8.32.1"
 	},
 	"dependencies": {
+		"bcryptjs": "^3.0.2",
 		"dotenv": "^16.5.0",
 		"ejs": "^3.1.10",
 		"pg": "^8.16.0",

@@ -11,11 +11,15 @@ const app: Express = express();
 import dotenv from "dotenv";
 dotenv.config();
 
+// --- ROUTES --- //
+import testRoutes from "./routes/testRoutes.ts";
+
+app.use(testRoutes);
+
 // custom error object to use status code
 interface HttpError extends Error {
 	statusCode: number;
 }
-
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
 	res.status(err.statusCode || 500).json({
 		message: err.message || "UNKONWN ERROR",
@@ -29,7 +33,7 @@ try {
 	await client.connect();
 	console.log(kleur.bgWhite("DATABASE CONNECTED SUCCESSFULLY"));
 } catch (err) {
-	console.log(kleur.bgRed("ERROR OCCURED WHILE RUNNING SERVER"));
+	console.log(kleur.bgRed("ERROR OCCURED CONNECTING TO DATABASE"));
 	console.log(err);
 }
 
