@@ -1,29 +1,34 @@
 import express, { Request, Response, NextFunction, Express } from "express";
 import { Server } from "http";
+import dotenv from "dotenv";
 import kleur from "kleur";
+
+// custom error object to use status code
+import { HttpError } from "./interfaces/httpError.ts";
+
+import { formatError } from "./utils/formatError.ts";
 
 // --- DATABASE CONFIG --- //
 
 import client from "./database/index.ts";
 
-const app: Express = express();
-
-import dotenv from "dotenv";
 dotenv.config();
 
+const app: Express = express();
+
+app.use(express.json());
+
 // --- ROUTES --- //
+import authRoutes from "./routes/authRoutes.ts";
 import testRoutes from "./routes/testRoutes.ts";
 
+app.use("/auth", authRoutes);
 app.use(testRoutes);
 
-// custom error object to use status code
-interface HttpError extends Error {
-	statusCode: number;
-}
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
 	res.status(err.statusCode || 500).json({
 		message: err.message || "UNKONWN ERROR",
-		stack: err.stack || "NO STACK",
+		stack: err.stack ? formatError(err.stack) : "NO STACK",
 	});
 });
 
@@ -48,3 +53,15 @@ try {
 	console.log(kleur.bgRed("ERROR OCCURED WHILE RUNNING SERVER"));
 	console.log(err);
 }
+
+// --- GRACEFUL SHUTDOWN --- //
+
+const shutdown = () => {
+	server.close(() => {
+		console.log(kleur.bgRed("SERVER CLOSED"));
+		process.exit(0);
+	});
+};
+
+process.on("SIGINT", shutdown);
+process.on("SIGTSTP", shutdown);
