@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ApiResponse } from "./_schema.ts";
-import { loginResponseModel } from "../services/_schema.ts";
+import { enrollResponseModel, loginResponseModel } from "../services/_schema.ts";
 import authService from "../services/authService.ts";
 import kleur from "kleur";
 
@@ -8,13 +8,11 @@ const authController = {
 	async postLogin(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
 			const result: loginResponseModel = await authService.loginUser(req);
-
 			const response: ApiResponse<loginResponseModel> = {
 				status: "success",
 				message: "Hello world",
 				data: result,
 			};
-
 			console.log(kleur.bgGreen("LOGIN SUCCESSFUL"));
 			res.json(response);
 		} catch (err) {
@@ -25,7 +23,7 @@ const authController = {
 
 	async postEnroll(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
-			// const result: signupResponseModel = await authService.signupUser(req);
+			const result: enrollModel = await authService.enrollNewStudent(req);
 		} catch (err) {
 			next(err);
 		}

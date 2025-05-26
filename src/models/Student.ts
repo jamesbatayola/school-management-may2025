@@ -1,8 +1,9 @@
+import { UUID } from "crypto";
 import db from "../database/index.ts";
 
 interface studentModel {
-	id: string;
-	student_id: string;
+	id: number;
+	student_id: UUID;
 	firstName: string;
 	lastName: string;
 	userName: string;
@@ -14,6 +15,17 @@ interface studentModel {
 }
 
 const student = {
+	async create(firstName: string, lastName: string, email: string, gender: string, password: string, guardianId: number): Promise<studentModel> {
+		const query = `
+			INSERT INTO students
+			VALUES ($1, $2, $3, 4$, $5, $6)
+			RETURNING *;
+		`;
+
+		const res = await db.query(query, [firstName, lastName, email, gender, password, guardianId]);
+		return res.rows[0];
+	},
+
 	async findAll(): Promise<studentModel[]> {
 		const query = `
 			SELECT * FROM students;
@@ -40,17 +52,6 @@ const student = {
 		`;
 
 		const res = await db.query(query, [student_id]);
-		return res.rows[0];
-	},
-
-	async create(firstName: string, lastName: string, email: string, gender: string, password: string): Promise<studentModel> {
-		const query = `
-			INSERT INTO students
-			VALUES ($1, $2, $3, 4$, $5)
-			RETURNING *;
-		`;
-
-		const res = await db.query(query, [firstName, lastName, email, gender, password]);
 		return res.rows[0];
 	},
 
