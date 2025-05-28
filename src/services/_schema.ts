@@ -1,6 +1,3 @@
-import { UUID } from "crypto";
-import { z } from "zod";
-
 export interface loginResponseModel {
 	accessToken: string;
 	refreshToken?: string;
@@ -8,12 +5,13 @@ export interface loginResponseModel {
 }
 
 export interface enrollResponseModel {
-	studentId: UUID;
+	studentId: string;
 	firstName: string;
 	lastName: string;
 	email: string;
-	level: string;
+	levelId: number;
 	enrollmentDate: string;
+	schooYearId: number;
 }
 
 export interface enrollModel {

@@ -146,7 +146,7 @@ CREAT CREATE TABLE IF NOT EXISTS student_classes (
 --
 CREAT CREATE TABLE IF NOT EXISTS enrollments (
     id SERIAL PRIMARY KEY NOT NULL,
-    student_id UUID UNIQUE NOT NULL,
+    student_id UUID NOT NULL,
     course_id INTEGER NOT NULL,
     enrolled_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (student_id) REFERENCES students (student_id) ON DELETE CASCADE,

@@ -7,33 +7,34 @@ interface guardianModel {
 }
 
 const guardian = {
-	async create(name: string, phone: string): Promise<guardianModel> {
+	async create(name: string, phone_number: string): Promise<guardianModel> {
 		const query = `
-            INSERT INTO guardians
+            INSERT INTO guardians (name, phone_number)
             VALUES ($1, $2)
             RETURNING *;    
         `;
 
-		const res = await db.query(query, [name, phone]);
+		const res = await db.query(query, [name, phone_number]);
+
 		return res.rows[0];
 	},
 
-	async find(phone: string): Promise<guardianModel> {
+	async find(phone_number: string): Promise<guardianModel> {
 		const query = `
 			SELECT * 
 			FROM guardians
-			WHERE phone = $1;
+			WHERE phone_number = $1;
 		`;
 
-		const res = await db.query(query, [phone]);
+		const res = await db.query(query, [phone_number]);
 		return res.rows[0];
 	},
 
-	async findOrCreate(name: string, phone: string): Promise<guardianModel> {
-		const _toFind = await this.find(phone);
+	async findOrCreate(name: string, phone_number: string): Promise<guardianModel> {
+		const _toFind = await this.find(phone_number);
 
 		if (!_toFind) {
-			return await this.create(name, phone);
+			return await this.create(name, phone_number);
 		}
 
 		return _toFind;

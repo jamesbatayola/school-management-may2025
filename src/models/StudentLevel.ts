@@ -8,14 +8,14 @@ interface studentYearLevelModel {
 }
 
 const studentLevel = {
-	async create(levelId: number, studentId: string, yearId: number): Promise<studentYearLevelModel> {
+	async create(levelId: number, studentId: string): Promise<studentYearLevelModel> {
 		const query = `
-            INSERT INTO student_levels
-            VALUES ($1, $2, $3)
+            INSERT INTO student_levels (level_id, student_id)
+            VALUES ($1, $2)
             RETURNING *;
         `;
 
-		const res = await db.query(query, [levelId, studentId, yearId]);
+		const res = await db.query(query, [levelId, studentId]);
 		return res.rows[0];
 	},
 

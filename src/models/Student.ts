@@ -3,7 +3,7 @@ import db from "../database/index.ts";
 
 interface studentModel {
 	id: number;
-	student_id: UUID;
+	student_id: string;
 	firstName: string;
 	lastName: string;
 	userName: string;
@@ -15,14 +15,15 @@ interface studentModel {
 }
 
 const student = {
-	async create(firstName: string, lastName: string, email: string, gender: string, password: string, guardianId: number): Promise<studentModel> {
+	async create(firstName: string, lastName: string, gender: string, email: string, guardianId: number, password: string): Promise<studentModel> {
 		const query = `
-			INSERT INTO students
-			VALUES ($1, $2, $3, 4$, $5, $6)
+			INSERT INTO students (first_name, last_name, gender, email, guardian_id, password)
+			VALUES ($1, $2, $3, $4, $5, $6)
 			RETURNING *;
 		`;
 
-		const res = await db.query(query, [firstName, lastName, email, gender, password, guardianId]);
+		const res = await db.query(query, [firstName, lastName, gender, email, guardianId, password]);
+
 		return res.rows[0];
 	},
 
@@ -42,6 +43,7 @@ const student = {
 		`;
 
 		const res = await db.query(query, [email]);
+
 		return res.rows[0];
 	},
 

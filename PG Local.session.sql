@@ -27,7 +27,10 @@ SET DEFAULT make_timestamp(
         )::INT,
         11,
         30,
-        0,
+        0,guardianId: number
         0,
         0
     );
+--
+--
+ALTER TABLE student_level
