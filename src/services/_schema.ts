@@ -5,21 +5,25 @@ export interface loginResponseModel {
 }
 
 export interface enrollResponseModel {
+	schoolYear: string;
+	term: string;
 	studentId: string;
 	firstName: string;
 	lastName: string;
 	email: string;
-	levelId: number;
+	yearLevel: string;
 	enrollmentDate: string;
-	schooYearId: number;
+	tuitionBillId: string;
 }
 
 export interface enrollModel {
-	schoolYearId: number;
+	schoolYear: string;
+	termId: number;
 	firstName: string;
 	lastName: string;
+	age: number;
 	gender: string;
-	guardianInfo: string[];
-	yearLevelId: number;
-	courses: number[];
+	guardianName: string;
+	yearLevel: string;
+	courses: string[];
 }

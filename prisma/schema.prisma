@@ -1,0 +1,171 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  // Primary Fields
+  id        String @id @default(uuid())
+  firstName String
+  lastName  String
+  age       Int
+  gender    String // Male | Female
+  email     String @unique
+  password  String
+
+  // Relationships
+  guardianId String
+  guardian   Guardian @relation(fields: [guardianId], references: [id])
+
+  StudentLevel StudentLevel[]
+  Enrollment   Enrollment[]
+
+  // Timestamps
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  TuitionBill TuitionBill[]
+}
+
+model Guardian {
+  // Primary Fields
+  id   String @id @default(uuid())
+  name String @unique
+
+  // Relationships
+  Student Student[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Level {
+  // Primary Fields
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  // Relationships
+  StudentLevel StudentLevel[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StudentLevel {
+  // Relationships
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+  levelName String
+  level     Level   @relation(fields: [levelName], references: [name])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([studentId, levelName])
+}
+
+model SchoolYear {
+  // Primary Fields
+  id        String   @id @default(uuid())
+  name      String   @unique
+  startDate DateTime
+  endDate   DateTime
+
+  // Relationships
+  Term        Term[]
+  TuitionBill TuitionBill[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Term {
+  // Primary Fields
+  id        Int      @id @default(autoincrement())
+  name      String
+  termStart DateTime
+  termEnd   DateTime
+
+  // Relationships
+  schoolYearId String
+  schoolYear   SchoolYear    @relation(fields: [schoolYearId], references: [id])
+  Enrollment   Enrollment[]
+  TuitionBill  TuitionBill[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Course {
+  // Primary Fields
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  // Relationships
+  subjectId  Int
+  subject    Subject      @relation(fields: [subjectId], references: [id])
+  Enrollment Enrollment[]
+}
+
+model Subject {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  // Relationships
+  course Course[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Enrollment {
+  id String @id @default(uuid())
+
+  // Relationships
+  studentId  String
+  student    Student @relation(fields: [studentId], references: [id])
+  courseName String
+  course     Course  @relation(fields: [courseName], references: [name])
+  termId     Int
+  term       Term    @relation(fields: [termId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TuitionBill {
+  // Primay Fields
+  id      String   @id @default(uuid())
+  total   Float
+  status  String   @default("PENDING")
+  dueDate DateTime @default(dbgenerated("(now() + interval '15 days')"))
+
+  // Relationships
+  studentId    String
+  student      Student    @relation(fields: [studentId], references: [id])
+  termId       Int
+  term         Term       @relation(fields: [termId], references: [id])
+  schoolYearId String
+  schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

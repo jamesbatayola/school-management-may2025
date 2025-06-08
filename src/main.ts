@@ -5,7 +5,6 @@ import kleur from "kleur";
 
 // custom error object to use status code
 import { HttpError } from "./interfaces/httpError.ts";
-
 import { formatError } from "./utils/formatError.ts";
 
 // --- DATABASE CONFIG --- //
@@ -23,7 +22,7 @@ import authRoutes from "./routes/authRoutes.ts";
 import testRoutes from "./routes/testRoutes.ts";
 
 app.use("/auth", authRoutes);
-app.use(testRoutes);
+app.use("/test", testRoutes);
 
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
 	res.status(err.statusCode || 500).json({

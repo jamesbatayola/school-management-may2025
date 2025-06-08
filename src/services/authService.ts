@@ -1,26 +1,26 @@
-// MODELS
-import SchoolYear from "../models/SchoolYear.ts";
-import Student from "../models/Student.ts";
-import Guardian from "../models/Guardian.ts";
-import Enrollment from "../models/Enrollment.ts";
-import StudentLevel from "../models/StudentLevel.ts";
-
 // UTILS
 import { generateEmail } from "../utils/generateEmail.ts";
 import { defaultPassword } from "../utils/generatePassword.ts";
-
 import { Request } from "express";
 import { HttpError } from "../interfaces/httpError.ts";
 import bcrypt from "bcryptjs";
 
+// SCHEMA
 import { loginResponseModel, enrollModel, enrollResponseModel } from "./_schema.ts";
-import enrollmentBill from "../models/EnrollmentBill.ts";
+
+// PRISMA
+import client from "../../prisma/instance.ts";
 
 const authService = {
+	// async _loginUser(req: Request): Promise<loginResponseModel> {
+	// 	const { email, password } = req.body;
+
+	// },
+
 	async loginUser(req: Request): Promise<loginResponseModel> {
 		const { email, password } = req.body;
 
-		const student = await Student.findByEmail(email);
+		const student = await client.student.findFirst({ where: { email: email } });
 
 		if (!student) {
 			const err = new Error("Email not found") as HttpError; // Type Assertion and Augmentation
@@ -37,72 +37,83 @@ const authService = {
 		return {
 			accessToken: "1234",
 			refreshToken: "1234",
-			studentId: student.student_id,
+			studentId: student.id,
 		};
 	},
 
 	async enrollNewStudent(req: Request): Promise<enrollResponseModel> {
 		const _enrollModel: enrollModel = req.body;
 
-		console.log("A");
+		const term = await client.term.findFirst({ where: { id: _enrollModel.termId } });
+		if (!term) {
+			const err = new Error("Term not found") as HttpError;
+			err.statusCode = 404;
+			throw err;
+		}
 
 		// create guardians
-		const studentGuardian = await Guardian.findOrCreate(_enrollModel.guardianInfo[0], _enrollModel.guardianInfo[1]);
+		let studentGuardian = await client.guardian.findFirst({ where: { name: _enrollModel.guardianName } });
+		if (!studentGuardian) {
+			studentGuardian = await client.guardian.create({ data: { name: _enrollModel.guardianName } });
+		}
 
+		// generate default email
 		const studentEmail = await generateEmail(_enrollModel.firstName, _enrollModel.lastName);
 
-		// email duplicate check
-		if (await Student.findByEmail(studentEmail)) {
+		// Check email if exists
+		if (await client.student.findFirst({ where: { email: studentEmail } })) {
 			const err = new Error("Student email already exist") as HttpError;
 			err.statusCode = 409;
 			throw err;
 		}
 
-		// generate password (default)
-		const studentPassword = defaultPassword();
+		// generate default password
+		const studentPassword = await bcrypt.hash(defaultPassword(), 10);
 
-		const studentAccount = await Student.create(
-			_enrollModel.firstName,
-			_enrollModel.lastName,
-			_enrollModel.gender,
-			studentEmail,
-			studentGuardian.id,
-			studentPassword
-		);
-
-		console.log("B");
-
-		console.log(studentAccount.student_id);
+		const studentAccount = await client.student.create({
+			data: {
+				firstName: _enrollModel.firstName,
+				lastName: _enrollModel.lastName,
+				age: _enrollModel.age,
+				gender: _enrollModel.gender,
+				guardianId: studentGuardian.id,
+				email: studentEmail,
+				password: studentPassword,
+			},
+		});
 
 		// create student-level record
-		const studentLevel = await StudentLevel.create(_enrollModel.yearLevelId, studentAccount.student_id);
-
-		console.log("B.1");
-
-		let enrollmentDate = "";
+		const studentLevel = await client.studentLevel.create({ data: { studentId: studentAccount.id, levelName: _enrollModel.yearLevel } });
 
 		// enroll subjects
 		for (const course of _enrollModel.courses) {
-			const enrollment = await Enrollment.create(studentAccount.student_id, course);
-			await enrollmentBill.create(enrollment.id);
-
-			if (!enrollmentDate) {
-				enrollmentDate = enrollment.enrolled_date;
-			}
+			await client.enrollment.create({
+				data: { studentId: studentAccount.id, courseName: course, termId: _enrollModel.termId },
+			});
 		}
 
-		console.log("B.2");
+		// enrollment bill
+		const studentTuitionBill = await client.tuitionBill.create({
+			data: {
+				total: _enrollModel.courses.length * 500.0,
+				studentId: studentAccount.id,
+				termId: _enrollModel.termId,
+				schoolYearId: term.schoolYearId,
+			},
+		});
 
-		console.log("C");
+		const enrollmentDate = new Date().toString();
 
 		return {
-			studentId: studentAccount.student_id,
+			schoolYear: _enrollModel.schoolYear,
+			term: term.name,
+			yearLevel: studentLevel.levelName,
+			studentId: studentAccount.id,
 			firstName: studentAccount.firstName,
 			lastName: studentAccount.lastName,
 			email: studentAccount.email,
-			levelId: studentLevel.levelId,
 			enrollmentDate: enrollmentDate,
-			schooYearId: (await SchoolYear.getCurrentYear()).id,
+			tuitionBillId: studentTuitionBill.id,
 		};
 	},
 
