@@ -149,7 +149,7 @@ exports.Prisma.LevelScalarFieldEnum = {
 
 exports.Prisma.StudentLevelScalarFieldEnum = {
   studentId: 'studentId',
-  levelName: 'levelName',
+  levelId: 'levelId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -207,6 +207,33 @@ exports.Prisma.TuitionBillScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.TeacherScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ClassScalarFieldEnum = {
+  id: 'id',
+  classStart: 'classStart',
+  classEnd: 'classEnd',
+  teacherId: 'teacherId',
+  courseId: 'courseId',
+  yearId: 'yearId',
+  termId: 'termId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentClassScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  classId: 'classId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -228,7 +255,10 @@ exports.Prisma.ModelName = {
   Course: 'Course',
   Subject: 'Subject',
   Enrollment: 'Enrollment',
-  TuitionBill: 'TuitionBill'
+  TuitionBill: 'TuitionBill',
+  Teacher: 'Teacher',
+  Class: 'Class',
+  StudentClass: 'StudentClass'
 };
 
 /**

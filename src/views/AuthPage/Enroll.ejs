@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" href="data:,">
+		<title>Document</title>
+	</head>
+	<body>
+
+		<h1>Enroll Page</h1>
+		
+		<form>
+
+			<div>
+				<label for="schoolYearInput">Year</label>
+				<input id="schoolYearInput" type="text" name="year" readonly value="2025">
+			</div>
+
+			<div>
+				<label for="termInput">Term</label>
+				<input id="termInput" type="text" name="term">
+			</div>
+
+			<div>
+				<label for="yearLevelInput">Year Level</label>
+				<select name="yearLevel" id="yearLevelInput">
+					<option value="">Select Year Level</option>
+					<option value="1">Grade 1</option>
+				</select>
+			</div>
+
+			<div>
+				<label for="firstNameInput">First name</label>
+				<input id="firstNameInput" type="text" name="firstName">
+			</div>
+
+			<div>
+				<label for="lastNameInput">Last name</label>
+				<input id="lastNameInput" type="text" name=""lastName>
+			</div>
+			
+			<div>
+				<label for="ageInput">Age</label>
+				<input id="ageInput" type="text" name="age">
+			</div>
+
+			<div>
+				<label for="">Gender</label>
+
+				<div class="gender-options" >
+					<input type="radio" name="gender" id="male" value="male">
+					<label for="male">Male</label>
+
+					<input type="radio" name="gender" id="female" value="female">
+					<label for="female">Female</label>
+
+					<input type="radio" name="gender" id="other" value="other">
+					<label for="other">Other</label>
+				</div>
+			</div>
+
+			<div>
+				<label for="guardianInput">Guardian</label>
+				<input id="guardianInput" type="text" name="guardian">
+			</div>
+
+
+			
+		</form>
+		
+
+	</body>
+</html>
+
+<script src="/js/Enroll.js" ></script>
+
+<style>
+    h1 {
+        color: blue;
+    }
+</style>

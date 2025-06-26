@@ -1,4 +1,6 @@
 .env
+.prettierrc
+.prettierignore
 .vscode
 node_modules
 sandbox.js

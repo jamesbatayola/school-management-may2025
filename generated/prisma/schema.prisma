@@ -25,16 +25,16 @@ model Student {
   password  String
 
   // Relationships
-  guardianId String
-  guardian   Guardian @relation(fields: [guardianId], references: [id])
-
+  guardianId   String
+  guardian     Guardian       @relation(fields: [guardianId], references: [id])
   StudentLevel StudentLevel[]
   Enrollment   Enrollment[]
+  TuitionBill  TuitionBill[]
+  StudentClass StudentClass[]
 
   // Timestamps
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  TuitionBill TuitionBill[]
+  createdAt DateTime @default(now()) // 2025-06-26T14:45:30.123Z
+  updatedAt DateTime @updatedAt // 2025-06-26T14:45:30.123Z
 }
 
 model Guardian {
@@ -67,14 +67,14 @@ model StudentLevel {
   // Relationships
   studentId String
   student   Student @relation(fields: [studentId], references: [id])
-  levelName String
-  level     Level   @relation(fields: [levelName], references: [name])
+  levelId   Int
+  level     Level   @relation(fields: [levelId], references: [id])
 
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@id([studentId, levelName])
+  @@id([studentId, levelId])
 }
 
 model SchoolYear {
@@ -87,6 +87,7 @@ model SchoolYear {
   // Relationships
   Term        Term[]
   TuitionBill TuitionBill[]
+  Class       Class[]
 
   // Timestamps
   createdAt DateTime @default(now())
@@ -105,6 +106,7 @@ model Term {
   schoolYear   SchoolYear    @relation(fields: [schoolYearId], references: [id])
   Enrollment   Enrollment[]
   TuitionBill  TuitionBill[]
+  Class        Class[]
 
   // Timestamps
   createdAt DateTime @default(now())
@@ -120,9 +122,11 @@ model Course {
   subjectId  Int
   subject    Subject      @relation(fields: [subjectId], references: [id])
   Enrollment Enrollment[]
+  Class      Class[]
 }
 
 model Subject {
+  // Primary Fields
   id   Int    @id @default(autoincrement())
   name String @unique
 
@@ -135,6 +139,7 @@ model Subject {
 }
 
 model Enrollment {
+  // Primary Fields
   id String @id @default(uuid())
 
   // Relationships
@@ -164,6 +169,57 @@ model TuitionBill {
   term         Term       @relation(fields: [termId], references: [id])
   schoolYearId String
   schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Teacher {
+  // Primary Fields
+  id   String @id @default(uuid())
+  name String
+
+  // Relationships
+  Class Class[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Class {
+  // Primary Fields
+  id         Int      @id @default(autoincrement())
+  classStart DateTime
+  classEnd   DateTime
+
+  // Relationships  
+  teacherId String
+  teacher   Teacher    @relation(fields: [teacherId], references: [id])
+  courseId  Int
+  course    Course     @relation(fields: [courseId], references: [id])
+  yearId    String
+  year      SchoolYear @relation(fields: [yearId], references: [id])
+  termId    Int
+  term      Term       @relation(fields: [termId], references: [id])
+
+  StudentClass StudentClass[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StudentClass {
+  // Primary Fields
+  id String @id @default(uuid())
+
+  // Relationships
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+  classId   Int
+  class     Class   @relation(fields: [classId], references: [id])
 
   // Timestamps
   createdAt DateTime @default(now())

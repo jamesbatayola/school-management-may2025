@@ -1,5 +1,20 @@
-import bcrypt from "bcryptjs";
-import client from "../prisma/instance.ts";
+import bcrypt from 'bcryptjs';
+import client from '../prisma/instance.ts';
+
+async function seed() {
+  //   await client.teacher.create({
+  //     data: {
+  //       name: 'George Fordwhite',
+  //     },
+  //   });
+  //   await client.guardian.create({
+  //     data: {
+  //       name: 'Mercedes Batayola',
+  //     },
+  //   });
+}
+
+await seed();
 
 // await client.student.createMany({
 // 	data: [
