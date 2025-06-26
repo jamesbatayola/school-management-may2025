@@ -65,6 +65,7 @@ model Level {
 
 model StudentLevel {
   // Relationships
+  id        Int     @id @default(autoincrement())
   studentId String
   student   Student @relation(fields: [studentId], references: [id])
   levelId   Int
@@ -73,8 +74,6 @@ model StudentLevel {
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@id([studentId, levelId])
 }
 
 model SchoolYear {

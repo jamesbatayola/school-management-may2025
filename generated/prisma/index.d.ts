@@ -5743,14 +5743,17 @@ export namespace Prisma {
   }
 
   export type StudentLevelAvgAggregateOutputType = {
+    id: number | null
     levelId: number | null
   }
 
   export type StudentLevelSumAggregateOutputType = {
+    id: number | null
     levelId: number | null
   }
 
   export type StudentLevelMinAggregateOutputType = {
+    id: number | null
     studentId: string | null
     levelId: number | null
     createdAt: Date | null
@@ -5758,6 +5761,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelMaxAggregateOutputType = {
+    id: number | null
     studentId: string | null
     levelId: number | null
     createdAt: Date | null
@@ -5765,6 +5769,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelCountAggregateOutputType = {
+    id: number
     studentId: number
     levelId: number
     createdAt: number
@@ -5774,14 +5779,17 @@ export namespace Prisma {
 
 
   export type StudentLevelAvgAggregateInputType = {
+    id?: true
     levelId?: true
   }
 
   export type StudentLevelSumAggregateInputType = {
+    id?: true
     levelId?: true
   }
 
   export type StudentLevelMinAggregateInputType = {
+    id?: true
     studentId?: true
     levelId?: true
     createdAt?: true
@@ -5789,6 +5797,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelMaxAggregateInputType = {
+    id?: true
     studentId?: true
     levelId?: true
     createdAt?: true
@@ -5796,6 +5805,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelCountAggregateInputType = {
+    id?: true
     studentId?: true
     levelId?: true
     createdAt?: true
@@ -5890,6 +5900,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelGroupByOutputType = {
+    id: number
     studentId: string
     levelId: number
     createdAt: Date
@@ -5916,6 +5927,7 @@ export namespace Prisma {
 
 
   export type StudentLevelSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     studentId?: boolean
     levelId?: boolean
     createdAt?: boolean
@@ -5925,6 +5937,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["studentLevel"]>
 
   export type StudentLevelSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     studentId?: boolean
     levelId?: boolean
     createdAt?: boolean
@@ -5934,6 +5947,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["studentLevel"]>
 
   export type StudentLevelSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     studentId?: boolean
     levelId?: boolean
     createdAt?: boolean
@@ -5943,13 +5957,14 @@ export namespace Prisma {
   }, ExtArgs["result"]["studentLevel"]>
 
   export type StudentLevelSelectScalar = {
+    id?: boolean
     studentId?: boolean
     levelId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type StudentLevelOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"studentId" | "levelId" | "createdAt" | "updatedAt", ExtArgs["result"]["studentLevel"]>
+  export type StudentLevelOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "levelId" | "createdAt" | "updatedAt", ExtArgs["result"]["studentLevel"]>
   export type StudentLevelInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     level?: boolean | LevelDefaultArgs<ExtArgs>
@@ -5970,6 +5985,7 @@ export namespace Prisma {
       level: Prisma.$LevelPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
+      id: number
       studentId: string
       levelId: number
       createdAt: Date
@@ -6057,8 +6073,8 @@ export namespace Prisma {
      * // Get first 10 StudentLevels
      * const studentLevels = await prisma.studentLevel.findMany({ take: 10 })
      * 
-     * // Only select the `studentId`
-     * const studentLevelWithStudentIdOnly = await prisma.studentLevel.findMany({ select: { studentId: true } })
+     * // Only select the `id`
+     * const studentLevelWithIdOnly = await prisma.studentLevel.findMany({ select: { id: true } })
      * 
      */
     findMany<T extends StudentLevelFindManyArgs>(args?: SelectSubset<T, StudentLevelFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentLevelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -6102,9 +6118,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many StudentLevels and only return the `studentId`
-     * const studentLevelWithStudentIdOnly = await prisma.studentLevel.createManyAndReturn({
-     *   select: { studentId: true },
+     * // Create many StudentLevels and only return the `id`
+     * const studentLevelWithIdOnly = await prisma.studentLevel.createManyAndReturn({
+     *   select: { id: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -6193,9 +6209,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more StudentLevels and only return the `studentId`
-     * const studentLevelWithStudentIdOnly = await prisma.studentLevel.updateManyAndReturn({
-     *   select: { studentId: true },
+     * // Update zero or more StudentLevels and only return the `id`
+     * const studentLevelWithIdOnly = await prisma.studentLevel.updateManyAndReturn({
+     *   select: { id: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6399,6 +6415,7 @@ export namespace Prisma {
    * Fields of the StudentLevel model
    */
   interface StudentLevelFieldRefs {
+    readonly id: FieldRef<"StudentLevel", 'Int'>
     readonly studentId: FieldRef<"StudentLevel", 'String'>
     readonly levelId: FieldRef<"StudentLevel", 'Int'>
     readonly createdAt: FieldRef<"StudentLevel", 'DateTime'>
@@ -17078,6 +17095,7 @@ export namespace Prisma {
 
 
   export const StudentLevelScalarFieldEnum: {
+    id: 'id',
     studentId: 'studentId',
     levelId: 'levelId',
     createdAt: 'createdAt',
@@ -17474,6 +17492,7 @@ export namespace Prisma {
     AND?: StudentLevelWhereInput | StudentLevelWhereInput[]
     OR?: StudentLevelWhereInput[]
     NOT?: StudentLevelWhereInput | StudentLevelWhereInput[]
+    id?: IntFilter<"StudentLevel"> | number
     studentId?: StringFilter<"StudentLevel"> | string
     levelId?: IntFilter<"StudentLevel"> | number
     createdAt?: DateTimeFilter<"StudentLevel"> | Date | string
@@ -17483,6 +17502,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelOrderByWithRelationInput = {
+    id?: SortOrder
     studentId?: SortOrder
     levelId?: SortOrder
     createdAt?: SortOrder
@@ -17492,7 +17512,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelWhereUniqueInput = Prisma.AtLeast<{
-    studentId_levelId?: StudentLevelStudentIdLevelIdCompoundUniqueInput
+    id?: number
     AND?: StudentLevelWhereInput | StudentLevelWhereInput[]
     OR?: StudentLevelWhereInput[]
     NOT?: StudentLevelWhereInput | StudentLevelWhereInput[]
@@ -17502,9 +17522,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"StudentLevel"> | Date | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     level?: XOR<LevelScalarRelationFilter, LevelWhereInput>
-  }, "studentId_levelId">
+  }, "id">
 
   export type StudentLevelOrderByWithAggregationInput = {
+    id?: SortOrder
     studentId?: SortOrder
     levelId?: SortOrder
     createdAt?: SortOrder
@@ -17520,6 +17541,7 @@ export namespace Prisma {
     AND?: StudentLevelScalarWhereWithAggregatesInput | StudentLevelScalarWhereWithAggregatesInput[]
     OR?: StudentLevelScalarWhereWithAggregatesInput[]
     NOT?: StudentLevelScalarWhereWithAggregatesInput | StudentLevelScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"StudentLevel"> | number
     studentId?: StringWithAggregatesFilter<"StudentLevel"> | string
     levelId?: IntWithAggregatesFilter<"StudentLevel"> | number
     createdAt?: DateTimeWithAggregatesFilter<"StudentLevel"> | Date | string
@@ -18340,6 +18362,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelUncheckedCreateInput = {
+    id?: number
     studentId: string
     levelId: number
     createdAt?: Date | string
@@ -18354,6 +18377,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
     studentId?: StringFieldUpdateOperationsInput | string
     levelId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18361,6 +18385,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelCreateManyInput = {
+    id?: number
     studentId: string
     levelId: number
     createdAt?: Date | string
@@ -18373,6 +18398,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
     studentId?: StringFieldUpdateOperationsInput | string
     levelId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19204,12 +19230,8 @@ export namespace Prisma {
     isNot?: LevelWhereInput
   }
 
-  export type StudentLevelStudentIdLevelIdCompoundUniqueInput = {
-    studentId: string
-    levelId: number
-  }
-
   export type StudentLevelCountOrderByAggregateInput = {
+    id?: SortOrder
     studentId?: SortOrder
     levelId?: SortOrder
     createdAt?: SortOrder
@@ -19217,10 +19239,12 @@ export namespace Prisma {
   }
 
   export type StudentLevelAvgOrderByAggregateInput = {
+    id?: SortOrder
     levelId?: SortOrder
   }
 
   export type StudentLevelMaxOrderByAggregateInput = {
+    id?: SortOrder
     studentId?: SortOrder
     levelId?: SortOrder
     createdAt?: SortOrder
@@ -19228,6 +19252,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelMinOrderByAggregateInput = {
+    id?: SortOrder
     studentId?: SortOrder
     levelId?: SortOrder
     createdAt?: SortOrder
@@ -19235,6 +19260,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelSumOrderByAggregateInput = {
+    id?: SortOrder
     levelId?: SortOrder
   }
 
@@ -20741,6 +20767,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelUncheckedCreateWithoutStudentInput = {
+    id?: number
     levelId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20883,6 +20910,7 @@ export namespace Prisma {
     AND?: StudentLevelScalarWhereInput | StudentLevelScalarWhereInput[]
     OR?: StudentLevelScalarWhereInput[]
     NOT?: StudentLevelScalarWhereInput | StudentLevelScalarWhereInput[]
+    id?: IntFilter<"StudentLevel"> | number
     studentId?: StringFilter<"StudentLevel"> | string
     levelId?: IntFilter<"StudentLevel"> | number
     createdAt?: DateTimeFilter<"StudentLevel"> | Date | string
@@ -21056,6 +21084,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelUncheckedCreateWithoutLevelInput = {
+    id?: number
     studentId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22589,6 +22618,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelCreateManyStudentInput = {
+    id?: number
     levelId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22627,12 +22657,14 @@ export namespace Prisma {
   }
 
   export type StudentLevelUncheckedUpdateWithoutStudentInput = {
+    id?: IntFieldUpdateOperationsInput | number
     levelId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StudentLevelUncheckedUpdateManyWithoutStudentInput = {
+    id?: IntFieldUpdateOperationsInput | number
     levelId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22773,6 +22805,7 @@ export namespace Prisma {
   }
 
   export type StudentLevelCreateManyLevelInput = {
+    id?: number
     studentId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22785,12 +22818,14 @@ export namespace Prisma {
   }
 
   export type StudentLevelUncheckedUpdateWithoutLevelInput = {
+    id?: IntFieldUpdateOperationsInput | number
     studentId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StudentLevelUncheckedUpdateManyWithoutLevelInput = {
+    id?: IntFieldUpdateOperationsInput | number
     studentId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

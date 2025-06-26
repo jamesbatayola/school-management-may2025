@@ -1,7 +1,8 @@
-import express, { Router } from 'express';
+import express, { Router, Request, Response } from 'express';
 const router: Router = express.Router();
 
 import client from '../../prisma/instance.ts';
+import testService from '../services/testService.ts';
 
 router.get('/ping', (req, res): void => {
   console.log('TEST!');
@@ -28,6 +29,10 @@ router.get('/student/:id', async (req, res) => {
   res.json({ data: studentSubjects });
 });
 
-// router.get('/e')
+router.get('/teacher/create', async (req: Request, res: Response) => {
+  const serviceResult = await testService.createTeacher(req);
+
+  res.json({ data: serviceResult });
+});
 
 export default router;

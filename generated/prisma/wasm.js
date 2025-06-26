@@ -148,6 +148,7 @@ exports.Prisma.LevelScalarFieldEnum = {
 };
 
 exports.Prisma.StudentLevelScalarFieldEnum = {
+  id: 'id',
   studentId: 'studentId',
   levelId: 'levelId',
   createdAt: 'createdAt',
